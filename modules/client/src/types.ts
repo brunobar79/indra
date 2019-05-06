@@ -944,6 +944,13 @@ export interface PurchaseRequest<MetadataType=any, PaymentMetadataType=any> {
 
 export type PurchasePaymentRequest<MetadataType=any> = Omit<PurchasePayment<MetadataType>, 'update'>
 
+
+/*********************************
+ ******* PAYMENT PROFILES ********
+ *********************************/
+// TODO: implement
+export type PaymentProfileConfig = any
+
 /*********************************
  ******* TYPE CONVERSIONS ********
  *********************************/
@@ -1153,11 +1160,6 @@ export function convertWithdrawalParameters<To extends NumericTypeName>(to: To, 
     'withdrawalTokenUser?',
   ]
   return convertFields(fromType, to, numericFields, obj)
-}
-
-export function convertThreadPayment<To extends NumericTypeName>(to: To, obj: Payment<any>): Payment<NumericTypes[To]> {
-  const fromType = getType(obj.amountToken)
-  return convertFields(fromType, to, argNumericFields.Payment, obj)
 }
 
 export function convertExchange<To extends NumericTypeName>(to: To, obj: ExchangeArgs<any>): ExchangeArgs<NumericTypes[To]> {

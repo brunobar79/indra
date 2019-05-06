@@ -9,8 +9,7 @@ import MerkleTree from './helpers/merkleTree'
 import * as t from './testing/index'
 import Web3 from 'web3';
 
-const hub = t.mkAddress("0xaa")
-const utils = new Utils(hub)
+const utils = new Utils()
 
 describe('Utils', () => {
   let web3: Web3

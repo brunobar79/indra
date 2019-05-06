@@ -24,7 +24,7 @@ export function weiToFiat(wei: BN, rate: string): string {
 }
 
 // rate should be given in tokens / eth
-export function assetToWei(assetWei: BN, rate: string) {
+export function assetToWei(assetWei: BN, rate: string): [BN, BN] {
   const exchangeRate = Big(mul(rate, EXCHANGE_MULTIPLIER))
   const [wei, assetRemaining] = divmod(
     assetWei.mul(EXCHANGE_MULTIPLIER_BN), exchangeRate

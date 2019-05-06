@@ -19,7 +19,6 @@ import {
   convertPayment,
   convertProposePending,
   convertProposePendingExchange,
-  convertThreadPayment,
   convertThreadState,
   convertVerboseEvent,
   convertWithdrawal,
@@ -82,8 +81,8 @@ export class Validator {
   hubAddress: Address
 
   constructor(hubAddress: Address, provider: any, abi: any) {
-    this.utils = new Utils(hubAddress)
-    this.stateGenerator = new StateGenerator(hubAddress)
+    this.utils = new Utils()
+    this.stateGenerator = new StateGenerator()
     this.provider = provider
     this.abi = new eth.utils.Interface(abi)
     this.hubAddress = hubAddress.toLowerCase()
@@ -609,7 +608,7 @@ export class Validator {
 
   public generateThreadPayment(prevStr: ThreadState, argsStr: Payment): UnsignedThreadState {
     const prev = convertThreadState("bn", prevStr)
-    const args = convertThreadPayment("bn", argsStr)
+    const args = convertPayment("bn", argsStr)
     const error = this.threadPayment(prev, args)
     if (error) {
       throw new Error(error)
@@ -633,7 +632,7 @@ export class Validator {
     if (!sig) {
       throw new Error(`Channel state does not have the requested signature. channelState: ${channelState}, sig: ${sig}, signer: ${signer}`)
     }
-    if (this.utils.recoverSignerFromChannelState(channelState, sig, signer) != adr.toLowerCase()) {
+    if (this.utils.recoverSignerFromChannelState(channelState, sig, adr) != adr.toLowerCase()) {
       throw new Error(`Channel state is not correctly signed by ${signer}. Detected: ${this.utils.recoverSignerFromChannelState(channelState, sig, signer)}. Channel state: ${JSON.stringify(channelState)}, sig: ${sig}`)
     }
   }

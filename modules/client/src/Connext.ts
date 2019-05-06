@@ -80,6 +80,10 @@ export interface ConnextOptions {
   contract?: IChannelManager
 }
 
+export interface ClientOptions {
+  hubUrl: string
+}
+
 ////////////////////////////////////////
 // Implementations
 ////////////////////////////////////////

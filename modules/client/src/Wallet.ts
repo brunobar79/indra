@@ -1,6 +1,6 @@
 import { ethers as eth } from 'ethers';
 import Web3 from 'web3';
-import { ConnextClientOptions } from './Connext';
+import { ConnextOptions } from './Connext';
 import {
   TransactionRequest,
   TransactionResponse,
@@ -15,7 +15,7 @@ export default class Wallet extends eth.Signer {
   web3?: Web3
   private password: string
 
-  constructor(opts: ConnextClientOptions) {
+  constructor(opts: ConnextOptions) {
     super()
     this.password = opts.password || ''
 

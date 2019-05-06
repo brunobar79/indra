@@ -14,7 +14,7 @@ import {
   PartialSignedOrSuccinctThread,
   getCustodialBalance,
 } from '.'
-import { ConnextClientOptions, ConnextInternal } from '../Connext'
+import { ConnextOptions, ConnextInternal } from '../Connext'
 import { default as ChannelManagerAbi } from '../contract/ChannelManagerAbi'
 import { IChannelManager } from '../contract/ChannelManager'
 import { Big } from '../lib/bn'
@@ -86,7 +86,7 @@ export class MockConnextInternal extends ConnextInternal {
   mockContract: MockChannelManager
   mockHub: MockHub
 
-  constructor(opts: Partial<ConnextClientOptions> = {}) {
+  constructor(opts: Partial<ConnextOptions> = {}) {
     const store = opts.store || new MockStore().createStore()
 
     const oldDispatch = store.dispatch as any

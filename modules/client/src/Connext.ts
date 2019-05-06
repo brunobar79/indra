@@ -40,33 +40,38 @@ import {
 import { Utils } from './Utils';
 import { Validator, } from './validator';
 import Wallet from './Wallet';
+import { Web3Provider } from 'ethers/providers';
 
 ////////////////////////////////////////
 // Interface Definitions
 ////////////////////////////////////////
 
-export interface ConnextClientOptions {
+export interface ConnextOptions {
   hubUrl: string
   ethUrl?: string
   mnemonic?: string
   privateKey?: string
   password?: string
-  user?: string
-  web3?: Web3
+  address?: string
+  web3Provider?: Web3Provider
+  connextProvider?: any // ConnextProvider
 
   // Functions used to save/load the persistent portions of its internal state
   loadState?: () => Promise<string | null>
   saveState?: (state: string) => Promise<any>
 
-  // Used to (in)validate the hubUrl if it's config has info that conflicts w below
-  ethNetworkId?: string
-  contractAddress?: Address
-  hubAddress?: Address
-  tokenAddress?: Address
-  tokenName?: string
+  // hook passed in for autosigning
+  safeSignHook?: (state: ChannelState | ThreadState) => Promise<string>
 
-  origin?: string
-  gasMultiple?: number
+  // // Used to (in)validate the hubUrl if it's config has info that conflicts w below
+  // ethNetworkId?: string
+  // contractAddress?: Address
+  // hubAddress?: Address
+  // tokenAddress?: Address
+  // tokenName?: string
+
+  // origin?: string
+  // gasMultiple?: number
   getLogger?: (name: string) => Logger
 
   // Optional, useful for dependency injection
@@ -80,7 +85,7 @@ export interface ConnextClientOptions {
 ////////////////////////////////////////
 
 // Used to get an instance of ConnextClient.
-export async function getConnextClient(opts: ConnextClientOptions): Promise<ConnextClient> {
+export async function getConnextClient(opts: ConnextOptions): Promise<ConnextClient> {
 
   const hubConfig = (await (new Networking(opts.hubUrl)).get(`config`)).data
   const config = {
@@ -99,7 +104,7 @@ export async function getConnextClient(opts: ConnextClientOptions): Promise<Conn
   }
 
   const wallet = new Wallet(opts)
-  merged.user = merged.user || wallet.address
+  merged.address = merged.address || wallet.address
 
   return new ConnextInternal({ ...merged }, wallet)
 }
@@ -117,10 +122,10 @@ export async function getConnextClient(opts: ConnextClientOptions): Promise<Conn
  *
  */
 export abstract class ConnextClient extends EventEmitter {
-  opts: ConnextClientOptions
+  opts: ConnextOptions
   internal: ConnextInternal
 
-  constructor(opts: ConnextClientOptions) {
+  constructor(opts: ConnextOptions) {
     super()
 
     this.opts = opts
@@ -192,7 +197,7 @@ export class ConnextInternal extends ConnextClient {
   threadsController: ThreadsController
   redeemController: RedeemController
 
-  constructor(opts: ConnextClientOptions, wallet: Wallet) {
+  constructor(opts: ConnextOptions, wallet: Wallet) {
     super(opts)
     this.opts = opts
 

@@ -1,13 +1,13 @@
 import { assert, } from '../testing/index';
-import { MockConnextInternal, patch } from '../testing/mocks';
+import { MockConnextInstance, patch } from '../testing/mocks';
 // @ts-ignore
 global.fetch = require('node-fetch-polyfill');
 
 describe('DepositController: unit tests', () => {
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
 
   beforeEach(async () => {
-    connext = new MockConnextInternal()
+    connext = new MockConnextInstance()
     await connext.start()
   })
 

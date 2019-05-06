@@ -1,10 +1,10 @@
 import { PaymentArgs, ThreadState } from '../types';
 import { Big } from '../lib/bn';
 import { assert, mkAddress } from '../testing';
-import { MockConnextInternal, MockStore } from '../testing/mocks'
+import { MockConnextInstance, MockStore } from '../testing/mocks'
 
 describe('ThreadController: unit tests', () => {
-    let connext: MockConnextInternal
+    let connext: MockConnextInstance
     let mockStore: MockStore
     const sender = "0xfb482f8f779fd96a857f1486471524808b97452d"
     const receiver1 = "0x23a1e8118EA985bBDcb7c40DE227a9880a79cf7F"
@@ -18,7 +18,7 @@ describe('ThreadController: unit tests', () => {
             balanceWei: [2, 2],
             balanceToken: [10, 10],
           })
-          connext = new MockConnextInternal({ user: sender, store: mockStore.createStore()})
+          connext = new MockConnextInstance({ user: sender, store: mockStore.createStore()})
         })
 
         it('should work for first thread', async () => {
@@ -110,7 +110,7 @@ describe('ThreadController: unit tests', () => {
             }
           ])
 
-          connext = new MockConnextInternal({ user: sender, store: mockStore.createStore()})
+          connext = new MockConnextInstance({ user: sender, store: mockStore.createStore()})
 
           await connext.start()
 
@@ -151,7 +151,7 @@ describe('ThreadController: unit tests', () => {
             amountToken: Big(2),
           }
         )
-        connext = new MockConnextInternal({ user: sender, store: mockStore.createStore()})
+        connext = new MockConnextInstance({ user: sender, store: mockStore.createStore()})
       })
 
       it('closing a thread should work', async () => {
@@ -212,7 +212,7 @@ describe('ThreadController: unit tests', () => {
           balanceWeiSender: '3',
         })
 
-        connext = new MockConnextInternal({ user: sender, store: mockStore.createStore()})
+        connext = new MockConnextInstance({ user: sender, store: mockStore.createStore()})
 
         await connext.start()
 

@@ -1,7 +1,7 @@
 import { ethers as eth } from 'ethers';
 import Semaphore = require('semaphore')
 import { AbstractController } from './AbstractController'
-import { ConnextInternal } from '../Connext'
+import { ConnextInstance } from '../Connext'
 import { getChannel, getLastThreadUpdateId } from '../state/getters';
 import { Poller } from '../lib/poller/Poller'
 import { assertUnreachable, maybe } from '../lib/utils'
@@ -357,7 +357,7 @@ export default class SyncController extends AbstractController {
 
   private flushErrorCount = 0
 
-  constructor(name: string, connext: ConnextInternal) {
+  constructor(name: string, connext: ConnextInstance) {
     super(name, connext)
     this.poller = new Poller({
       name: 'SyncController',

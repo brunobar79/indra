@@ -1,5 +1,5 @@
 import { AbstractController } from './AbstractController'
-import { ConnextInternal } from '../Connext';
+import { ConnextInstance } from '../Connext';
 import { Big, mul, toWeiBig, toWeiString } from '../lib/bn';
 import { BEI_AMOUNT, FINNEY_AMOUNT, WEI_AMOUNT } from '../lib/constants'
 import { getExchangeRates, getTxCount } from '../state/getters'
@@ -32,7 +32,7 @@ export class ExchangeController extends AbstractController {
 
   private poller: Poller
 
-  constructor(name: string, connext: ConnextInternal) {
+  constructor(name: string, connext: ConnextInstance) {
     super(name, connext)
     this.poller = new Poller({
       name: 'ExchangeController',

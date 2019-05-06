@@ -1,12 +1,12 @@
 import { mkAddress, parameterizedTests, assert } from '../testing';
-import { MockConnextInternal, MockStore } from '../testing/mocks';
+import { MockConnextInstance, MockStore } from '../testing/mocks';
 import { convertChannelState } from '../types';
 import { Big } from '../lib/bn';
 // @ts-ignore
 global.fetch = require('node-fetch-polyfill');
 
 const user = mkAddress('0xAAA')
-let connext: MockConnextInternal
+let connext: MockConnextInstance
 const mockStore = new MockStore()
 const exchangeRate = '5'
 
@@ -19,7 +19,7 @@ describe("createWithdrawalParameters", () => {
       balanceToken: [0, 50],
     })
     mockStore.setExchangeRate({ 'USD': exchangeRate })
-    connext = new MockConnextInternal({ 
+    connext = new MockConnextInstance({ 
       user, 
       store: mockStore.createStore() 
     })
@@ -87,7 +87,7 @@ describe('WithdrawalController: unit tests', () => {
       balanceToken: [0, 50],
     })
     mockStore.setExchangeRate({ 'USD': exchangeRate })
-    connext = new MockConnextInternal({ 
+    connext = new MockConnextInstance({ 
       user, 
       store: mockStore.createStore() 
     })

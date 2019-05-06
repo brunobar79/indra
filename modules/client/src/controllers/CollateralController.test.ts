@@ -1,13 +1,13 @@
-import { MockConnextInternal, } from '../testing/mocks';
+import { MockConnextInstance, } from '../testing/mocks';
 // @ts-ignore
 global.fetch = require('node-fetch-polyfill');
 
 describe('CollateralController: unit tests', () => {
 
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
 
   beforeEach(async () => {
-    connext = new MockConnextInternal()
+    connext = new MockConnextInstance()
     await connext.start()
   })
 

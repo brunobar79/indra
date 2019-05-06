@@ -32,7 +32,7 @@ import {
   convertFields
 } from "./types";
 import { BigNumber as BN } from "ethers/utils";
-import { ConnextClient } from "./Connext";
+import { ConnextClient, getConnextClient } from "./Connext";
 import {
   assetToWei,
   maxBN,
@@ -45,6 +45,7 @@ import { Utils } from "./Utils";
 import Logger from "./lib/Logger";
 import Wallet from "./Wallet";
 import Web3 from "web3";
+import { Networking } from "./helpers/networking";
 
 // connext instances contain the lower level types and fields you would need
 // to be used by various clients that can be "connected" to an instance
@@ -59,7 +60,7 @@ export interface ConnextOptions {
   privateKey?: string
   password?: string
   address?: string
-  web3?: Web3
+  web3?: Web3 // TODO: update wallet to work with Web3EtherProvider
   connextProvider?: ConnextProvider
   safeSignHook?: (state: ChannelState | ThreadState) => Promise<string>
   loadState?: () => Promise<string | null>
@@ -139,7 +140,7 @@ export interface IConnextInstance {
   };
 
   connect(hubUrl: string): Promise<ConnextClient>;
-  disconnect(hubUrl: string): Promise<void>;
+  // disconnect(hubUrl: string): Promise<void>;
 
   wallet: Wallet
 }
@@ -192,17 +193,20 @@ export class ConnextInstance implements IConnextInstance {
     }
     // start all of the controllers and connect the
     // ConnextInstance class with an active client-hub pair
-    const client = new ConnextClient({ hubUrl }, this.wallet)
+    const hubConfig = (await (new Networking(hubUrl)).get(`config`)).data
+    const config = {
+      contractAddress: hubConfig.channelManagerAddress.toLowerCase(),
+      hubAddress: hubConfig.hubWalletAddress.toLowerCase(),
+      tokenAddress: hubConfig.tokenAddress.toLowerCase(),
+      ethNetworkId: hubConfig.ethNetworkId.toLowerCase(),
+    }
+
+    const client = new ConnextClient({
+      hubUrl,
+      ...config
+    }, this.wallet)
     await client.connect()
-    this.client = client
     return client
   }
 
-  public async disconnect(): Promise<void> {
-    // stop all of the pollers and controllers
-    // and shut down the attached client
-    if (this.client) {
-      await this.client.disconnect()
-    }
-  }
 }

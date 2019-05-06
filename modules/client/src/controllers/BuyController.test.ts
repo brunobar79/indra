@@ -1,5 +1,5 @@
 import { assert, mkAddress, mkHash, parameterizedTests, assertThreadStateEqual } from '../testing';
-import { MockConnextInternal, MockStore, MockHub } from '../testing/mocks'
+import { MockConnextInstance, MockStore, MockHub } from '../testing/mocks'
 import { PaymentArgs, PurchasePaymentType, PurchasePaymentRequest, Payment, SyncResult, PurchasePayment } from '../types';
 import { emptyAddress } from '../Utils';
 import Web3 from 'web3';
@@ -7,7 +7,7 @@ import Web3 from 'web3';
 global.fetch = require('node-fetch-polyfill');
 
 describe("BuyController: assignPaymentTypes", () => {
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
 
   const user = mkAddress('0x7fab')
   const receiver = mkAddress('0x22c')
@@ -16,7 +16,7 @@ describe("BuyController: assignPaymentTypes", () => {
   beforeEach(async () => {
     mockStore.setHubAddress()
     const store = mockStore.createStore()
-    connext = new MockConnextInternal({ 
+    connext = new MockConnextInstance({ 
       user, 
       store,
     })
@@ -111,7 +111,7 @@ describe('BuyController: unit tests', () => {
   const receiver = mkAddress('0x22c')
   const receiver2 = mkAddress('0x22c44')
   const hubAddress = mkAddress('0xfc5')
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
   let mockStore: MockStore
   let secret: string
 
@@ -123,7 +123,7 @@ describe('BuyController: unit tests', () => {
       balanceToken: [10, 10],
     })
     const mockHub = new MockHub()
-    connext = new MockConnextInternal({ user, store: mockStore.createStore(), hub: mockHub })
+    connext = new MockConnextInstance({ user, store: mockStore.createStore(), hub: mockHub })
     secret = connext.generateSecret()
   })
 

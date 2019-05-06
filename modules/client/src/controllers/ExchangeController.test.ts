@@ -1,15 +1,15 @@
 import { mkAddress } from '../testing';
-import { MockStore, MockConnextInternal } from '../testing/mocks';
+import { MockStore, MockConnextInstance } from '../testing/mocks';
 // @ts-ignore
 global.fetch = require('node-fetch-polyfill');
 
 describe('ExchangeController: unit tests', () => {
   const user = mkAddress('0xAAA')
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
   const mockStore = new MockStore()
 
   beforeEach(async () => {
-    connext = new MockConnextInternal()
+    connext = new MockConnextInstance()
     await connext.start()
   })
 
@@ -21,7 +21,7 @@ describe('ExchangeController: unit tests', () => {
       balanceToken: [50, 0],
     })
     mockStore.setExchangeRate({ 'USD': '5' })
-    connext = new MockConnextInternal({ user, store: mockStore.createStore() })
+    connext = new MockConnextInstance({ user, store: mockStore.createStore() })
     await connext.start()
     await connext.exchangeController.exchange('10', 'wei')
     await new Promise(res => setTimeout(res, 20))

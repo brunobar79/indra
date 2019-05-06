@@ -14,7 +14,7 @@ import {
   PartialSignedOrSuccinctThread,
   getCustodialBalance,
 } from '.'
-import { ConnextOptions, ConnextInternal } from '../Connext'
+import { ConnextOptions, ConnextInstance } from '../Connext'
 import { default as ChannelManagerAbi } from '../contract/ChannelManagerAbi'
 import { IChannelManager } from '../contract/ChannelManager'
 import { Big } from '../lib/bn'
@@ -82,7 +82,7 @@ const createTx = (opts?: any): Transaction => {
   return Object.assign(defaultTx, opts)
 }
 
-export class MockConnextInternal extends ConnextInternal {
+export class MockConnextInstance extends ConnextInstance {
   mockContract: MockChannelManager
   mockHub: MockHub
 

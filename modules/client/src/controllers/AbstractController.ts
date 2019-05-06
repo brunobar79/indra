@@ -1,4 +1,4 @@
-import { ConnextInternal } from "../Connext";
+import { ConnextInstance } from "../Connext";
 import { IHubAPIClient } from "../Hub";
 import Logger from '../lib/Logger'
 import { ConnextState, ConnextStore } from "../state/store";
@@ -6,12 +6,12 @@ import { Validator } from '../validator';
 
 export abstract class AbstractController {
   name: string
-  connext: ConnextInternal
+  connext: ConnextInstance
   logger: Logger
   hub: IHubAPIClient
   validator: Validator
 
-  constructor(name: string, connext: ConnextInternal) {
+  constructor(name: string, connext: ConnextInstance) {
     this.connext = connext
     this.name = name
     this.logger = connext.getLogger(this.name)

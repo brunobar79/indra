@@ -1,6 +1,6 @@
 import { mergeSyncResults, filterPendingSyncResults } from './SyncController'
 import { assert, getChannelState, mkAddress, mkHash, parameterizedTests, getThreadState } from '../testing'
-import { MockConnextInternal, MockStore } from '../testing/mocks';
+import { MockConnextInstance, MockStore } from '../testing/mocks';
 import { StateGenerator } from '../StateGenerator';
 import { ChannelUpdateReason, convertChannelState, InvalidationArgs, SyncResult } from '../types'
 // @ts-ignore
@@ -321,7 +321,7 @@ describe('filterPendingSyncResults', () => {
 })
 
 describe.skip('SyncController.findBlockNearestTimeout', () => {
-  const connext = new MockConnextInternal()
+  const connext = new MockConnextInstance()
 
   let latestBlockNumber: number | null = null
   connext.provider.getBlock = ((num: any) => {
@@ -365,7 +365,7 @@ describe.skip('SyncController.findBlockNearestTimeout', () => {
 
 describe.skip("SyncController: invalidation handling", () => {
   const user = mkAddress('0xUUU')
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
   const prevStateTimeout = 1000
 
   const lastValid = getChannelState("empty", {
@@ -401,7 +401,7 @@ describe.skip("SyncController: invalidation handling", () => {
       sigHub: '0xsig-hub',
     })
 
-    connext = new MockConnextInternal({
+    connext = new MockConnextInstance({
       user,
       store: mockStore.createStore(),
     })
@@ -494,7 +494,7 @@ describe.skip("SyncController: invalidation handling", () => {
 // these tests must be revisited in addition to other found bugs. 
 describe.skip('SyncController: unit tests (ConfirmPending)', () => {
   const user = mkAddress('0xUUU')
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
   const mockStore = new MockStore()
 
   const initialChannel = getChannelState("empty", {
@@ -505,7 +505,7 @@ describe.skip('SyncController: unit tests (ConfirmPending)', () => {
   })
 
   beforeEach(async () => {
-    connext = new MockConnextInternal({ user })
+    connext = new MockConnextInstance({ user })
     // NOTE: this validator depends on the eth provider
     // have it just return the generated state
     connext.validator.generateConfirmPending = (prev, args) => {

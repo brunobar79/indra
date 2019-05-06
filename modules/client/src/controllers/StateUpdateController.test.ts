@@ -1,5 +1,5 @@
 import { assert, getThreadState, mkAddress, parameterizedTests, mkHash } from '../testing';
-import { MockStore, MockConnextInternal, MockHub } from '../testing/mocks';
+import { MockStore, MockConnextInstance, MockHub } from '../testing/mocks';
 import { PaymentArgs, SyncResult, ChannelUpdateReason } from '../types';
 // @ts-ignore
 global.fetch = require('node-fetch-polyfill');
@@ -13,7 +13,7 @@ const user = "0xc55eddadeeb47fcde0b3b6f25bd47d745ba7e7fa"
 
 describe('StateUpdateController: thread payments', () => {
   const user = mkAddress('0xAAA')
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
 
   parameterizedTests([
     {
@@ -42,7 +42,7 @@ describe('StateUpdateController: thread payments', () => {
       balanceWei: [2, 0],
     })
 
-    connext = new MockConnextInternal({
+    connext = new MockConnextInstance({
       user,
       store: mockStore.createStore(),
     })
@@ -89,7 +89,7 @@ describe('StateUpdateController: thread payments', () => {
 })
 
 describe("StateUpdateController: hub to user payments", () => {
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
 
   parameterizedTests([
     {
@@ -171,7 +171,7 @@ describe("StateUpdateController: hub to user payments", () => {
         balanceToken: [10, 10],
       })
       mockStore.setSyncResultsFromHub(syncResults as SyncResult[])
-      connext = new MockConnextInternal({
+      connext = new MockConnextInstance({
         user,
         store: mockStore.createStore()
       })
@@ -203,7 +203,7 @@ describe("StateUpdateController: hub to user payments", () => {
 
 describe.skip('StateUpdateController: invalidation handling', () => {
   const user = mkAddress('0xUUU')
-  let connext: MockConnextInternal
+  let connext: MockConnextInstance
 
   parameterizedTests([
     {
@@ -233,7 +233,7 @@ describe.skip('StateUpdateController: invalidation handling', () => {
       txCountChain: 1,
     })
 
-    connext = new MockConnextInternal({
+    connext = new MockConnextInstance({
       user,
       store: mockStore.createStore(),
     })

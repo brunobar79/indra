@@ -1,6 +1,6 @@
 import { ethers as eth } from 'ethers';
 import Web3 from 'web3';
-import { ConnextOptions } from './Connext';
+import { ConnextOptions } from './ConnextInstance';
 import {
   TransactionRequest,
   TransactionResponse,
@@ -22,18 +22,20 @@ export default class Wallet extends eth.Signer {
     ////////////////////////////////////////
     // Connect to an eth provider
 
-    // First choice: use provided ethUrl
-    if (opts.ethUrl) {
-      this.provider = new eth.providers.JsonRpcProvider(opts.ethUrl)
+    // First choice: use connext provider
+    if (opts.connextProvider) {
+      // TODO: proper way to instantiate??
+      // for now, can be ethUrl
+      this.provider = new eth.providers.JsonRpcProvider(opts.connextProvider)
 
     // Second choice: use provided web3
     } else if (opts.web3 && opts.web3.currentProvider) {
-      this.provider = new eth.providers.Web3Provider((opts.web3.currentProvider as any))
-
-    // Default: use hub's ethprovider (derived from hubUrl)
+      // TODO: wtf??? Web3EthereumProvider from Web3 is not
+      // compatible with Web3Provider from ethers/providers
+      this.provider = new eth.providers.Web3Provider(opts.web3.currentProvider as any)
     } else {
-      const ethUrl = `${opts.hubUrl.substring(0, opts.hubUrl.length - 4)}/eth`
-      this.provider = new eth.providers.JsonRpcProvider(ethUrl)
+      // NOTE: cannot use default hub provider without a hubUrl
+      throw new Error("Cannot find provider in given options")
     }
 
     ////////////////////////////////////////
@@ -52,9 +54,9 @@ export default class Wallet extends eth.Signer {
       this.address = this.signer.address.toLowerCase()
 
     // Third choice: Sign w web3
-    } else if (opts.user && opts.web3 && opts.web3.eth && opts.web3.eth.sign) {
+    } else if (opts.address && opts.web3 && opts.web3.eth && opts.web3.eth.sign) {
       this.web3 = opts.web3
-      this.address = opts.user.toLowerCase()
+      this.address = opts.address.toLowerCase()
       this.web3.eth.defaultAccount = this.address
 
     // Default: create new random mnemonic

@@ -29,11 +29,6 @@ export class Utils {
   getters = getters
   Poller = Poller
 
-  hubAddress: string
-  constructor(hubAddress: string) {
-    this.hubAddress = hubAddress
-  }
-
   public createDepositRequestProposalHash(
     req: Payment,
   ): string {
@@ -119,16 +114,17 @@ export class Utils {
     return hash
   }
 
+  public generateSecret(): string {
+    return eth.utils.solidityKeccak256(['bytes32'], [eth.utils.randomBytes(32)])
+  }
+
   public recoverSignerFromChannelState(
     channelState: UnsignedChannelState,
     sig: string,
-    signer: "user" | "hub", // = "user"
+    signer: string // expected signer
   ): string | null {
     const hash: any = this.createChannelStateHash(channelState)
-    return this.recoverSigner(hash, sig, signer == "user" 
-      ? channelState.user 
-      : this.hubAddress
-    )
+    return this.recoverSigner(hash, sig, signer)
   }
 
   public createThreadStateHash(threadState: UnsignedThreadState): string {

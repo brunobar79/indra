@@ -2,13 +2,12 @@ import { assert } from './testing/index'
 import * as t from './testing/index'
 import { StateGenerator, calculateExchange, } from './StateGenerator';
 import { Utils } from './Utils';
-import { convertChannelState, convertPayment, ChannelStateBN, convertThreadState, ThreadStateBN, convertExchange, convertDeposit, convertWithdrawal, convertThreadPayment, ChannelState, WithdrawalArgs, InvalidationArgs, } from './types';
+import { convertChannelState, convertPayment, ChannelStateBN, convertThreadState, ThreadStateBN, convertExchange, convertDeposit, convertWithdrawal, ChannelState, WithdrawalArgs, InvalidationArgs, } from './types';
 import { getChannelState, getWithdrawalArgs } from './testing'
 import { Big } from './lib/bn';
 
-const hub = t.mkAddress("0xaa")
-const sg = new StateGenerator(hub)
-const utils = new Utils(hub)
+const sg = new StateGenerator()
+const utils = new Utils()
 
 function createHigherNoncedChannelState(
   prev: ChannelStateBN,
@@ -516,7 +515,7 @@ describe('StateGenerator', () => {
         amountWei: '10',
       }
 
-      const curr = sg.threadPayment(prev, convertThreadPayment("bn", payment))
+      const curr = sg.threadPayment(prev, convertPayment("bn", payment))
 
       const check = createHigherNoncedThreadState(prev, {
         balanceToken: [0, 10],

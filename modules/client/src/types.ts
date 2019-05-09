@@ -670,7 +670,9 @@ export type VerboseChannelEvent<T = string> = UnsignedChannelState<T> & {
 export type VerboseChannelEventBN = VerboseChannelEvent<BN>
 
 // TODO: make this fn more generalized, will fail on other dispute events
-// pushing temp fix
+// pushing temp fix.
+// NOTE: this function will work for all relevant channel updates
+// will fail on thread dispute events
 export function makeEventVerbose(obj: ChannelEvent, hubAddress: Address, contractAddress: Address): VerboseChannelEvent {
   let ans = {} as any
   ans.contractAddress = contractAddress
